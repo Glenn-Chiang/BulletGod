@@ -163,4 +163,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   magnetDistance: 10
-  healAmount: 5
+  healAmount: 2

@@ -4,14 +4,20 @@ public class EnemyBullet : Bullet
 {
     public override float Damage { get; set; }
 
+    private PlayerStats playerStats;
+
+    private void Start()
+    {
+        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+    }
+
     protected override void OnCollisionEnter2D(Collision2D collision)
     {
-        Destroy(gameObject);
         // Check if the bullet collided with the player
-        var playerStats = collision.collider.GetComponent<PlayerStats>();
-        if (playerStats != null)
+        if (collision.collider.CompareTag("Player"))
         {
             playerStats.ReceiveDamage(Damage);
         }
+        Destroy(gameObject);
     }
 }

@@ -124,7 +124,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     // Constantly keep track of the player's position to determine whether to be in Idle or Aggro state
     private void TrackPlayer()
     {
-        playerPosition = playerControl.rigidBody.position;
+        playerPosition = playerControl.rb.position;
         distanceFromPlayer = Vector2.Distance(rigidBody.position, playerPosition);
 
         if (distanceFromPlayer > AggroDistance)

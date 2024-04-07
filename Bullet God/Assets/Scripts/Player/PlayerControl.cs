@@ -9,9 +9,13 @@ public class PlayerControl : MonoBehaviour
 
     private PlayerStats playerStats;
 
-    public Rigidbody2D rigidBody;
+    public Rigidbody2D rb;
     public Transform firePoint;
     public PlayerBullet bulletPrefab;
+
+    [SerializeField]
+    private float dashForce = 1000;
+    private bool _isDashing = false;
 
     private void Awake()
     {
@@ -33,7 +37,7 @@ public class PlayerControl : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Dash();
+            _isDashing = true;
         }
     }
 
@@ -50,18 +54,23 @@ public class PlayerControl : MonoBehaviour
             velocity.y = 0;
         }
 
-        rigidBody.MovePosition(rigidBody.position + velocity * playerStats.moveSpeed * Time.deltaTime);
+        rb.MovePosition(rb.position + velocity * playerStats.moveSpeed * Time.deltaTime);
 
         // Rotate toward cursor position
-        Vector2 aimDirection = cursorPos - rigidBody.position;
+        Vector2 aimDirection = cursorPos - rb.position;
         float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-        rigidBody.MoveRotation(angle);
+        rb.MoveRotation(angle);
+
+        if (_isDashing)
+        {
+            Dash();
+            _isDashing = false;
+        }
     }
 
     private void Dash()
     {
-        Debug.Log("Dash");
-        rigidBody.MovePosition(rigidBody.position + velocity * playerStats.dashSpeed * Time.deltaTime);
+        rb.AddForce(velocity * dashForce);
     }
 
     private void Shoot()
