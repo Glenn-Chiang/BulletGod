@@ -6,10 +6,8 @@ public class PlayerStats: MonoBehaviour, IDamageable
     public float moveSpeed = 10;
     private float maxMoveSpeed = 20;
 
-    public float dashSpeed = 100;
-
     public float bulletDamage = 10;
-    public float maxBulletDamage = 40;
+    private float maxBulletDamage = 40;
 
     public float bulletPower = 20; // Affects speed of bullet
     private float maxBulletPower = 40;

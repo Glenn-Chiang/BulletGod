@@ -5,17 +5,19 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     private Vector2 cursorPos;
-    private Vector2 velocity;
+    private Vector2 moveDir;
 
     private PlayerStats playerStats;
 
     public Rigidbody2D rb;
-    public Transform firePoint;
-    public PlayerBullet bulletPrefab;
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private PlayerBullet bulletPrefab;
 
-    [SerializeField]
-    private float dashForce = 1000;
-    private bool _isDashing = false;
+    [SerializeField] private float dashSpeed = 40;
+    [SerializeField] private float dashDuration = 0.2f;
+    [SerializeField] private float dashCooldown = 1;
+    private bool isDashing = false;
+    private bool canDash = true;
 
     private void Awake()
     {
@@ -28,49 +30,54 @@ public class PlayerControl : MonoBehaviour
 
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
-        velocity = new Vector2(moveX, moveY).normalized;
+        moveDir = new Vector2(moveX, moveY).normalized;
 
         if (Input.GetButtonDown("Fire1"))
         {
             Shoot();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (canDash && Input.GetKeyDown(KeyCode.Space))
         {
-            _isDashing = true;
+            StartCoroutine(Dash());
         }
     }
 
     void FixedUpdate()
     {
-        // If player tries to move left beyond left edge or move right beyond right edge, stop their horizontal movement
-        if ((transform.position.x <= WorldMap.minX && velocity.x < 0) || (transform.position.x >= WorldMap.maxX && velocity.x > 0))
+        if (!isDashing)
         {
-            velocity.x = 0;
-        }
-        // If player tries to move up beyond top edge or move down beyond bottom edge, stop their vertical movement
-        if ((transform.position.y <= WorldMap.minY && velocity.y < 0) || (transform.position.y >= WorldMap.maxY && velocity.y > 0))
-        {
-            velocity.y = 0;
-        }
+            // If player tries to move left beyond left edge or move right beyond right edge, stop their horizontal movement
+            if ((transform.position.x <= WorldMap.minX && moveDir.x < 0) || (transform.position.x >= WorldMap.maxX && moveDir.x > 0))
+            {
+                moveDir.x = 0;
+            }
+            // If player tries to move up beyond top edge or move down beyond bottom edge, stop their vertical movement
+            if ((transform.position.y <= WorldMap.minY && moveDir.y < 0) || (transform.position.y >= WorldMap.maxY && moveDir.y > 0))
+            {
+                moveDir.y = 0;
+            }
 
-        rb.MovePosition(rb.position + velocity * playerStats.moveSpeed * Time.deltaTime);
+            rb.velocity = moveDir * playerStats.moveSpeed;
+        }
 
         // Rotate toward cursor position
         Vector2 aimDirection = cursorPos - rb.position;
         float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
         rb.MoveRotation(angle);
 
-        if (_isDashing)
-        {
-            Dash();
-            _isDashing = false;
-        }
     }
 
-    private void Dash()
+    private IEnumerator Dash()
     {
-        rb.AddForce(velocity * dashForce);
+        canDash = false; // cannot dash while dashing or during cooldown
+        isDashing = true; 
+        rb.velocity = new Vector2(moveDir.x * dashSpeed, moveDir.y * dashSpeed);
+        yield return new WaitForSeconds(dashDuration); // dash happens over several frames
+        isDashing = false;
+
+        yield return new WaitForSeconds(dashCooldown); // start cooldown
+        canDash = true; // end cooldown
     }
 
     private void Shoot()
