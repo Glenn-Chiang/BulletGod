@@ -58,7 +58,7 @@ public class PlayerControl : MonoBehaviour
                 moveDir.y = 0;
             }
 
-            rb.MovePosition(rb.position + moveDir * playerStats.moveSpeed * Time.deltaTime);
+            rb.MovePosition(rb.position + moveDir * playerStats.moveSpeed.value * Time.deltaTime);
         }
 
         // Rotate toward cursor position
@@ -83,8 +83,8 @@ public class PlayerControl : MonoBehaviour
     private void Shoot()
     {
         var bullet = Instantiate(bulletPrefab, firePoint.transform.position, firePoint.transform.rotation);
-        var bulletForce = firePoint.right * playerStats.bulletPower;
+        var bulletForce = firePoint.right * playerStats.bulletPower.value;
         bullet.GetComponent<Rigidbody2D>().AddForce(bulletForce, ForceMode2D.Impulse);
-        bullet.Damage = playerStats.bulletDamage;
+        bullet.Damage = playerStats.bulletDamage.value;
     }
 }

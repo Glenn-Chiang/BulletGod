@@ -2998,11 +2998,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 794445c833b55924ab96ab562c356903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  bulletDamage: 10
-  bulletPower: 20
-  maxHealth: 100
   xpPerLevel: 100
+  moveSpeed:
+    value: 10
+  bulletDamage:
+    value: 10
+  bulletPower:
+    value: 20
+  maxHealth:
+    value: 100
   playerBullet: {fileID: 8952450150969888429, guid: a85be645847e8c743828816e1d68d6e5, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

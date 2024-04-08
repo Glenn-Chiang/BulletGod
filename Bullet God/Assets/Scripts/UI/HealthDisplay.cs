@@ -9,8 +9,8 @@ public class HealthDisplay : MonoBehaviour
     private void Start()
     {
         playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
-        slider.maxValue = playerStats.maxHealth;
-        slider.value = playerStats.maxHealth;
+        slider.maxValue = playerStats.maxHealth.value;
+        slider.value = playerStats.maxHealth.value;   
     }
 
     private void Update()
