@@ -58,7 +58,7 @@ public class PlayerControl : MonoBehaviour
                 moveDir.y = 0;
             }
 
-            rb.velocity = moveDir * playerStats.moveSpeed;
+            rb.MovePosition(rb.position + moveDir * playerStats.moveSpeed * Time.deltaTime);
         }
 
         // Rotate toward cursor position
@@ -71,8 +71,8 @@ public class PlayerControl : MonoBehaviour
     private IEnumerator Dash()
     {
         canDash = false; // cannot dash while dashing or during cooldown
-        isDashing = true; 
-        rb.velocity = new Vector2(moveDir.x * dashSpeed, moveDir.y * dashSpeed);
+        isDashing = true;
+        rb.velocity = moveDir * dashSpeed;
         yield return new WaitForSeconds(dashDuration); // dash happens over several frames
         isDashing = false;
 
