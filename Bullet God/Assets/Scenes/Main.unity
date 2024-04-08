@@ -1081,7 +1081,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &973177075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1198,7 +1198,7 @@ GameObject:
   - component: {fileID: 1009733747}
   - component: {fileID: 1009733746}
   m_Layer: 5
-  m_Name: LevelUpDisplay
+  m_Name: LevelUpScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1616,6 +1616,7 @@ GameObject:
   - component: {fileID: 1644089163}
   - component: {fileID: 1644089162}
   - component: {fileID: 1644089166}
+  - component: {fileID: 1644089167}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1721,6 +1722,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverScreen: {fileID: 973177074}
+--- !u!114 &1644089167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644089161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5417c1b72d27f2a4a8b1bb648c4afc28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelUpScreen: {fileID: 1009733744}
 --- !u!1 &1653912327
 GameObject:
   m_ObjectHideFlags: 0
@@ -2236,7 +2250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b4bf004896ecd409daf789104b26b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelNumText: {fileID: 0}
+  levelNumText: {fileID: 10671501}
 --- !u!1 &1921454473
 GameObject:
   m_ObjectHideFlags: 0

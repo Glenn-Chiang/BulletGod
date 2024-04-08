@@ -1,10 +1,10 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class LevelDisplay : MonoBehaviour
 {
     private PlayerStats playerStats;
-    public Text levelNumText;
+    public TMP_Text levelNumText;
 
     private void Start()
     {

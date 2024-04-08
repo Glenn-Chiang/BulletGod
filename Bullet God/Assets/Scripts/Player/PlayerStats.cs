@@ -3,18 +3,27 @@ using UnityEngine;
 
 public class PlayerStats: MonoBehaviour, IDamageable
 {
-    public float moveSpeed = 10;
-    private float maxMoveSpeed = 20;
+    public class Stat
+    {
 
-    public float bulletDamage = 10;
-    private float maxBulletDamage = 40;
+    }
 
-    public float bulletPower = 20; // Affects speed of bullet
+    public const float baseSpeed = 10;
+    public float moveSpeed = baseSpeed;
+    private float maxMoveSpeed = 14;
+
+    public const float baseBulletDamage = 10;
+    public float bulletDamage = baseBulletDamage;
+    private float maxBulletDamage = 25;
+
+    public const float baseBulletPower = 20; // Affects speed of bullet
+    public float bulletPower = baseBulletPower;
     private float maxBulletPower = 40;
 
-    private float _health;
-    public float maxHealth = 100;
-    private float maxMaxHealth = 500; // maxHealth cannot be higher than this
+    public const float baseMaxHealth = 100;
+    public float maxHealth = baseMaxHealth;
+    private float _health = baseMaxHealth;
+    private const float maxMaxHealth = 500; 
 
     public float Health => _health;
     public float HitPoints => _health;
@@ -24,6 +33,7 @@ public class PlayerStats: MonoBehaviour, IDamageable
 
     public float xpPerLevel = 100; // How much xp required to level up
     private int _level = 0;
+    private int maxLevel = 10;
     public int Level => _level;
 
     private PlayerControl playerControl;
@@ -32,9 +42,10 @@ public class PlayerStats: MonoBehaviour, IDamageable
 
     private GameManager gameManager;
 
+    public event EventHandler OnLevelUp;
+
     private void Awake()
-    {
-        _health = maxHealth;    
+    {   
         playerControl = GetComponent<PlayerControl>();
     }
 
@@ -77,10 +88,12 @@ public class PlayerStats: MonoBehaviour, IDamageable
     {
         _level ++;
         maxHealth = IncreaseStat(maxHealth, maxMaxHealth);
-        _health = maxHealth;
+        _health = maxHealth; // Heal to full on level up
         moveSpeed = IncreaseStat(moveSpeed, maxMoveSpeed);
         bulletDamage = IncreaseStat(bulletDamage, maxBulletDamage);
         bulletPower = IncreaseStat(bulletPower, maxBulletPower);
+
+        OnLevelUp?.Invoke(this, EventArgs.Empty);
     }
 
     private float IncreaseStat(float currentStat,  float maxStat, float multiplier = 1.1f)
