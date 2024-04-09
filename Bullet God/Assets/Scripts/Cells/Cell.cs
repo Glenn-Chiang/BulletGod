@@ -6,9 +6,9 @@ public abstract class Cell : MonoBehaviour, IDamageable
 {
     public abstract float HitPoints { get; protected set; }
 
-    [SerializeField]
-    private GameObject orb;
-    private readonly int numOrbs = 4;
+    [SerializeField] private GameObject orb;
+
+    protected virtual int NumOrbs => 4;
 
     protected PlayerStats playerStats;
     private Rigidbody2D rb;
@@ -51,7 +51,7 @@ public abstract class Cell : MonoBehaviour, IDamageable
     {
         Destroy(gameObject);
         // Spawn orbs when destroyed
-        for (int i = 0; i < numOrbs; i++)
+        for (int i = 0; i < NumOrbs; i++)
         {
             float randomXOffset = UnityEngine.Random.Range(0f, 0.5f);
             float randomYOffset = UnityEngine.Random.Range(0f, 0.5f);

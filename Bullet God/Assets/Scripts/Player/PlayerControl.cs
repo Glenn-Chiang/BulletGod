@@ -42,7 +42,7 @@ public class PlayerControl : MonoBehaviour
             Shoot();
         }
 
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2") && playerStats.ChargeCount > 0)
         {
             StartCoroutine(FireLaser());
         }
@@ -79,6 +79,7 @@ public class PlayerControl : MonoBehaviour
 
     private IEnumerator FireLaser()
     {
+        playerStats.ConsumeCharge();
         isFiringLaser = true;
         Instantiate(laser, firePoint.position, firePoint.rotation);
         yield return new WaitForSeconds(laserDuration);

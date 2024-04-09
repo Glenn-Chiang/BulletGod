@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -3757321500426242247}
   - component: {fileID: 8094990712785911248}
   m_Layer: 0
-  m_Name: PowerCell
+  m_Name: ChargeCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -177,5 +177,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80f8ae86f8f130842a9012debbc6e1e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orb: {fileID: 2264530109394903628, guid: 8c1f9ef4247abca40aed0a6d21867571, type: 3}
-  _hitPoints: 200
+  orb: {fileID: 1245549456738041078, guid: c093ddb636c7dbe4daf79a0a54a366de, type: 3}
+  _hitPoints: 100

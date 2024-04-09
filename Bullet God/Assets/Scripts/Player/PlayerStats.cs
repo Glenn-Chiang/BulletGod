@@ -5,10 +5,10 @@ using UnityEngine;
 [Serializable, Inspectable]
 public class Stat
 {
-    private float baseValue;
+    private readonly float baseValue;
     public float value;
-    private float maxValue;
-    private float factor; // Factor by which current value is multiplied whenever stat is incremented
+    private readonly float maxValue;
+    private readonly float factor; // Factor by which current value is multiplied whenever stat is incremented
 
     public Stat(float baseValue, float maxValue, int maxIncrements) // maxIncrements refers to how many times the stat can be incremented
     {
@@ -51,19 +51,19 @@ public class PlayerStats: MonoBehaviour, IDamageable
     public float Health => _health;
     public float HitPoints => _health;
 
+    private int maxCharges = 10;
+    private int chargeCount = 0; // Number of laser charges the player currently has
+    public int ChargeCount => chargeCount;
 
-    private PlayerControl playerControl;
     [SerializeField]
     private PlayerBullet playerBullet;
 
     private GameManager gameManager;
-
     public event EventHandler OnLevelUp;
 
     private void Awake()
     {
         _health = maxHealth.value;
-        playerControl = GetComponent<PlayerControl>();
     }
 
     private void Start()
@@ -111,6 +111,16 @@ public class PlayerStats: MonoBehaviour, IDamageable
         bulletPower.Increment();
 
         OnLevelUp?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void AddCharge()
+    {
+        chargeCount = Math.Min(maxCharges, chargeCount + 1);
+    }
+
+    public void ConsumeCharge()
+    {
+        chargeCount = Math.Max(0, chargeCount - 1);
     }
 
     private void Die()
