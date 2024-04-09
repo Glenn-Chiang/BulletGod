@@ -51,8 +51,8 @@ public class PlayerStats: MonoBehaviour, IDamageable
     public float Health => _health;
     public float HitPoints => _health;
 
-    private int maxCharges = 10;
-    private int chargeCount = 0; // Number of laser charges the player currently has
+    public readonly int maxCharges = 10;
+    [SerializeField] private int chargeCount = 0; // Number of laser charges the player currently has
     public int ChargeCount => chargeCount;
 
     [SerializeField]

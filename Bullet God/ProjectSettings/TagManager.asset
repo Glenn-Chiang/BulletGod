@@ -48,3 +48,6 @@ TagManager:
   - name: Enemy
     uniqueID: 3540153595
     locked: 0
+  - name: Orb
+    uniqueID: 2786508687
+    locked: 0

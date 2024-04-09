@@ -6,7 +6,7 @@ public class Laser : MonoBehaviour
 {
     private LineRenderer lineRenderer;
     private Vector2 fireDirection;
-    [SerializeField] private float fireDuration = 0.1f;
+    [SerializeField] private float fireDuration = 0.2f;
     [SerializeField] private float damage = 100f;
 
     private void Awake()

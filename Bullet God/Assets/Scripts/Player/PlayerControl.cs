@@ -31,6 +31,8 @@ public class PlayerControl : MonoBehaviour
 
     void Update()
     {
+        if (isFiringLaser) return;
+
         cursorPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         float moveX = Input.GetAxisRaw("Horizontal");
@@ -55,7 +57,9 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isDashing && !isFiringLaser)
+        if (isFiringLaser) return;
+        
+        if (!isDashing)
         {
             // If player tries to move left beyond left edge or move right beyond right edge, stop their horizontal movement
             if ((transform.position.x <= WorldMap.minX && moveDir.x < 0) || (transform.position.x >= WorldMap.maxX && moveDir.x > 0))
