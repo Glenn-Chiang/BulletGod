@@ -2028,7 +2028,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1668252830}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceec26da3cf202b45929fd147415a4c5, type: 3}
   m_Name: 
@@ -2865,9 +2865,11 @@ MonoBehaviour:
   rb: {fileID: 1534449848806921903}
   firePoint: {fileID: 5432151337198064494}
   bulletPrefab: {fileID: 8952450150969888429, guid: a85be645847e8c743828816e1d68d6e5, type: 3}
+  laser: {fileID: 827611116589086159, guid: 0c504783ce7b6f34881e8951c6ab9932, type: 3}
   dashSpeed: 40
   dashDuration: 0.2
   dashCooldown: 1
+  laserDuration: 0.2
 --- !u!58 &4005936366155893568
 CircleCollider2D:
   m_ObjectHideFlags: 0

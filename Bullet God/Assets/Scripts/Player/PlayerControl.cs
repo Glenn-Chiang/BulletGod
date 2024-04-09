@@ -6,18 +6,23 @@ public class PlayerControl : MonoBehaviour
 {
     private Vector2 cursorPos;
     private Vector2 moveDir;
+    private Vector2 aimDir;
 
     private PlayerStats playerStats;
 
     public Rigidbody2D rb;
     [SerializeField] private Transform firePoint;
     [SerializeField] private PlayerBullet bulletPrefab;
+    [SerializeField] private Laser laser;
 
     [SerializeField] private float dashSpeed = 40;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1;
     private bool isDashing = false;
     private bool canDash = true;
+
+    [SerializeField] private float laserDuration = 0.2f;
+    private bool isFiringLaser = false;
 
     private void Awake()
     {
@@ -37,6 +42,11 @@ public class PlayerControl : MonoBehaviour
             Shoot();
         }
 
+        if (Input.GetButtonDown("Fire2"))
+        {
+            StartCoroutine(FireLaser());
+        }
+
         if (canDash && Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(Dash());
@@ -45,7 +55,7 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isDashing)
+        if (!isDashing && !isFiringLaser)
         {
             // If player tries to move left beyond left edge or move right beyond right edge, stop their horizontal movement
             if ((transform.position.x <= WorldMap.minX && moveDir.x < 0) || (transform.position.x >= WorldMap.maxX && moveDir.x > 0))
@@ -62,12 +72,26 @@ public class PlayerControl : MonoBehaviour
         }
 
         // Rotate toward cursor position
-        Vector2 aimDirection = cursorPos - rb.position;
-        float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
+        aimDir = (cursorPos - rb.position).normalized;
+        float angle = Mathf.Atan2(aimDir.y, aimDir.x) * Mathf.Rad2Deg;
         rb.MoveRotation(angle);
-
     }
 
+    private IEnumerator FireLaser()
+    {
+        isFiringLaser = true;
+        Instantiate(laser, firePoint.position, firePoint.rotation);
+        yield return new WaitForSeconds(laserDuration);
+        isFiringLaser = false;
+    }
+
+    private void Shoot()
+    {
+        var bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        var bulletForce = firePoint.right * playerStats.bulletPower.value;
+        bullet.GetComponent<Rigidbody2D>().AddForce(bulletForce, ForceMode2D.Impulse);
+        bullet.Damage = playerStats.bulletDamage.value;
+    }
     private IEnumerator Dash()
     {
         canDash = false; // cannot dash while dashing or during cooldown
@@ -78,13 +102,5 @@ public class PlayerControl : MonoBehaviour
 
         yield return new WaitForSeconds(dashCooldown); // start cooldown
         canDash = true; // end cooldown
-    }
-
-    private void Shoot()
-    {
-        var bullet = Instantiate(bulletPrefab, firePoint.transform.position, firePoint.transform.rotation);
-        var bulletForce = firePoint.right * playerStats.bulletPower.value;
-        bullet.GetComponent<Rigidbody2D>().AddForce(bulletForce, ForceMode2D.Impulse);
-        bullet.Damage = playerStats.bulletDamage.value;
     }
 }
