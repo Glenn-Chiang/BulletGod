@@ -6,7 +6,7 @@ public class Laser : MonoBehaviour
 {
     private LineRenderer lineRenderer;
     private Vector2 fireDirection;
-    [SerializeField] private float fireDuration = 0.2f;
+    [SerializeField] private float fireDuration;
     [SerializeField] private float damage = 100f;
 
     private void Awake()
@@ -17,6 +17,7 @@ public class Laser : MonoBehaviour
 
     private void Start()
     {
+        fireDuration = GameObject.Find("Player").GetComponent<PlayerControl>().laserDuration;
         StartCoroutine(Fire());
     }
 

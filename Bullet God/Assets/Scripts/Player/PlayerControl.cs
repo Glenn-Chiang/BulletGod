@@ -21,7 +21,7 @@ public class PlayerControl : MonoBehaviour
     private bool isDashing = false;
     private bool canDash = true;
 
-    [SerializeField] private float laserDuration = 0.2f;
+    [SerializeField] public float laserDuration = 0.5f;
     private bool isFiringLaser = false;
 
     private void Awake()
@@ -44,7 +44,7 @@ public class PlayerControl : MonoBehaviour
             Shoot();
         }
 
-        if (Input.GetButtonDown("Fire2") && playerStats.ChargeCount > 0)
+        if (Input.GetButtonDown("Fire2") && !isFiringLaser && playerStats.ChargeCount > 0)
         {
             StartCoroutine(FireLaser());
         }
@@ -57,7 +57,11 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isFiringLaser) return;
+        if (isFiringLaser)
+        {
+            rb.velocity = Vector3.zero;
+            return;
+        }
         
         if (!isDashing)
         {
@@ -83,11 +87,14 @@ public class PlayerControl : MonoBehaviour
 
     private IEnumerator FireLaser()
     {
-        playerStats.ConsumeCharge();
         isFiringLaser = true;
         Instantiate(laser, firePoint.position, firePoint.rotation);
+        playerStats.ConsumeCharge();
+        rb.freezeRotation = true; // cannot rotate while laser is firing
+
         yield return new WaitForSeconds(laserDuration);
         isFiringLaser = false;
+        rb.freezeRotation = false;
     }
 
     private void Shoot()
