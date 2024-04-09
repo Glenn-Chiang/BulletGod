@@ -435,6 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9534462f33165604cbdabc7c333c1082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 207406987}
 --- !u!1 &307353084
 GameObject:
   m_ObjectHideFlags: 3
@@ -2357,7 +2358,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1668252830}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceec26da3cf202b45929fd147415a4c5, type: 3}
   m_Name: 
@@ -3100,7 +3101,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6804607444688246178}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -3129,7 +3130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8023962318550003165}
   - component: {fileID: 2256352108704920937}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3274,7 +3275,7 @@ MonoBehaviour:
   dashSpeed: 40
   dashDuration: 0.2
   dashCooldown: 1
-  laserDuration: 0.2
+  laserDuration: 0.4
 --- !u!58 &4005936366155893568
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3334,7 +3335,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5432151337198064494}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3351,7 +3352,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2101719054532152480}
   - component: {fileID: 3639699970977433580}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3371,7 +3372,7 @@ GameObject:
   - component: {fileID: 4005936366155893568}
   - component: {fileID: 3812880230803587310}
   - component: {fileID: 9186709381962269158}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -3414,6 +3415,7 @@ MonoBehaviour:
     value: 20
   maxHealth:
     value: 100
+  chargeCount: 0
   playerBullet: {fileID: 8952450150969888429, guid: a85be645847e8c743828816e1d68d6e5, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

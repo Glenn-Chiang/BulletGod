@@ -8,10 +8,13 @@ public class Laser : MonoBehaviour
     private Vector2 fireDirection;
     [SerializeField] private float fireDuration;
     [SerializeField] private float damage = 100f;
+    private float beamWidth = 1f;
 
     private void Awake()
     {
         lineRenderer = gameObject.GetComponentInChildren<LineRenderer>();
+        lineRenderer.startWidth = beamWidth;
+        lineRenderer.endWidth = beamWidth;
         fireDirection = transform.right;
     }
 
@@ -25,7 +28,9 @@ public class Laser : MonoBehaviour
     {
         RenderLine();
 
-        var raycastHits = Physics2D.RaycastAll(transform.position, fireDirection);
+        int layerMask = ~LayerMask.GetMask("Player");
+        var raycastHits = Physics2D.CircleCastAll(transform.position, beamWidth, fireDirection, Mathf.Infinity, layerMask);
+        //var raycastHits = Physics2D.RaycastAll(transform.position, fireDirection);
         foreach(var hit in raycastHits)
         {
             if (hit.collider.gameObject.TryGetComponent<IDamageable>(out var damageableEntity))
