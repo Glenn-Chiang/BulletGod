@@ -26,11 +26,11 @@ public abstract class Spawner : MonoBehaviour
     {
         for (int i = 0; i < NumberToSpawn; i++)
         {
-            SpawnRandomObject();
+            SpawnRandom();
         }
     }
 
-    protected void SpawnRandomObject()
+    protected void SpawnRandom()
     {
         Vector2 spawnPosition = GetRandomPosition();
         GameObject objectToSpawn = GetRandomObject();

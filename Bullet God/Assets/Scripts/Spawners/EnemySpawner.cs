@@ -21,7 +21,9 @@ public class EnemySpawner : Spawner
         gameManager.OnGameOver += HandleGameOver;
 
         // After initial spawning, continue to spawn a new random enemy at set time interval
-        InvokeRepeating(nameof(SpawnRandomObject), 0, spawnInterval);
+        InvokeRepeating(nameof(SpawnRandom), 0, spawnInterval);
+
+        
     }
 
     private void HandleGameOver(object sender, EventArgs e)

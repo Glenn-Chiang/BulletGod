@@ -90,12 +90,19 @@ public class PlayerStats: MonoBehaviour, IDamageable
 
     public void ReceiveXP(float xp)
     {
+        if (_level == maxLevel) return;
+
         if (_xp + xp < xpPerLevel)
         {
             _xp += xp;
+        } else if (_level == maxLevel - 1)
+        {
+            // Reached max level
+            _xp = xpPerLevel;
+            LevelUp();
         } else
         {
-            _xp = _xp + xp - xpPerLevel;
+            _xp = _xp + xp - xpPerLevel; // Reset to 0 and carry over the remainder
             LevelUp();
         }
         
@@ -103,7 +110,7 @@ public class PlayerStats: MonoBehaviour, IDamageable
 
     private void LevelUp()
     {
-        _level ++;
+        _level++;
         maxHealth.Increment();
         _health = maxHealth.value; // Heal to full on level up
         moveSpeed.Increment();
