@@ -53,7 +53,7 @@ public abstract class Spawner : MonoBehaviour
         return SpawnObjects[0].go;
     }
 
-    private Vector2 GetRandomPosition()
+    protected virtual Vector2 GetRandomPosition()
     {
         float xPos = UnityEngine.Random.Range(minX, maxX);
         float yPos = UnityEngine.Random.Range(minY, maxY);

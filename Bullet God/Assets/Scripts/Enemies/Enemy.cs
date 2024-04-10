@@ -38,18 +38,25 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     private Vector2 startPosition;
     private Vector2 roamDestination;
 
+    private void Awake()
+    {
+        // Start in idle roaming state
+        state = State.Idle;
+        startPosition = rigidBody.position;
+        roamDestination = GetRoamDestination();
+    }
+
     private void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        if (gameManager.GameState == GameManager.State.GameOver) return;
+        
         gameManager.OnGameOver += HandleGameOver;
 
         var player = GameObject.Find("Player");
         playerControl = player.GetComponent<PlayerControl>();
         playerStats = player.GetComponent<PlayerStats>();
 
-        state = State.Idle;
-        startPosition = rigidBody.position;
-        roamDestination = GetRoamDestination();
     }
 
     protected virtual void FixedUpdate()

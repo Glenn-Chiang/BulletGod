@@ -16,10 +16,13 @@ public abstract class Orb : MonoBehaviour
     protected PlayerStats playerStats;
     private GameManager gameManager;
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+    }
 
+    private void Start()
+    {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         
         if (gameManager.GameState == GameManager.State.GameOver) return;
