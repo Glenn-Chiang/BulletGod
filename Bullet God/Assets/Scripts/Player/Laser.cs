@@ -28,7 +28,7 @@ public class Laser : MonoBehaviour
     {
         RenderLine();
 
-        int layerMask = ~LayerMask.GetMask("Player");
+        int layerMask = ~LayerMask.GetMask("Player"); // Include all layers except Player
         var raycastHits = Physics2D.CircleCastAll(transform.position, beamWidth, fireDirection, Mathf.Infinity, layerMask);
         //var raycastHits = Physics2D.RaycastAll(transform.position, fireDirection);
         foreach(var hit in raycastHits)

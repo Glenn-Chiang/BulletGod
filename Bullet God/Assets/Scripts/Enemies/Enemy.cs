@@ -22,6 +22,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     public Transform firePoint;
     public EnemyBullet bulletPrefab;
 
+    [SerializeField] ParticleSystem explosionPrefab;
+
     public virtual float AggroDistance => 20; // Enemy will start attacking player when it is within this distance
     public virtual float MinDistance => 10; // Enemy will stop moving toward player when it is less than this distance from the player
     public virtual float AttackInterval => 2;
@@ -156,13 +158,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         HitPoints -= damage;
         if (HitPoints <= 0)
         {
-            OnDestroyed();
+            Die();
         }
     }
 
-    protected void OnDestroyed()
+    protected void Die()
     {
         Destroy(gameObject);
+
+        // Spawn explosion
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+
         // When destroyed, award player with XP
         playerStats.ReceiveXP(XP_reward);
 

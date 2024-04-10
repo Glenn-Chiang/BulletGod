@@ -314,6 +314,7 @@ MonoBehaviour:
   rigidBody: {fileID: 786602227125004500}
   firePoint: {fileID: 2387104591373466453}
   bulletPrefab: {fileID: -2902846343829857274, guid: 4b6afbf743f137440afd5ad5e2b95e44, type: 3}
+  explosionPrefab: {fileID: 1641928172900413765, guid: 898bf7121928ee043b7f7771f771f012, type: 3}
   state: 0
   _health: 40
   xpReward: 5
