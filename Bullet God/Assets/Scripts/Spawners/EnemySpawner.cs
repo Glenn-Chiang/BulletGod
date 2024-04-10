@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ public class EnemySpawner : Spawner
     [SerializeField] private float factor = 0.9f; // Factor by which spawnInterval will be multiplied during each increment
 
     private GameManager gameManager;
+    private GameObject player;
 
     protected override void Start()
     {
@@ -24,6 +26,8 @@ public class EnemySpawner : Spawner
 
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         gameManager.OnGameOver += HandleGameOver;
+
+        player = GameObject.Find("Player");
 
         StartCoroutine(SpawnRoutine());
         InvokeRepeating(nameof(IncrementSpawnRate), 0, incrementInterval);
@@ -52,14 +56,26 @@ public class EnemySpawner : Spawner
 
     protected override Vector2 GetRandomPosition()
     {
-        // Prevent spawning in certain range around origin, i.e. start position of player
-        var excludedRange = Enumerable.Range(-20, 20);
-        var xRange = Enumerable.Range((int)minX, (int)(maxX - minX)).Except(excludedRange);
-        var yRange = Enumerable.Range((int)minY, (int)(maxY - minY)).Except(excludedRange);
+        // Prevent spawning in certain range around player position
+        var excludeXRange = GetExcludeRange((int)player.transform.position.x);
+        var excludeYRange = GetExcludeRange((int)player.transform.position.y);
+        var xRange = Enumerable.Range((int)minX, (int)(maxX - minX)).Except(excludeXRange);
+        var yRange = Enumerable.Range((int)minY, (int)(maxY - minY)).Except(excludeYRange);
 
         var rand = new System.Random();
         int xPos = xRange.ToList()[rand.Next(xRange.Count())];
         int yPos = yRange.ToList()[rand.Next(yRange.Count())];
         return new Vector2(xPos, yPos);
+    }
+
+    // Get the range of positions to exclude
+    private IEnumerable<int> GetExcludeRange(int centrePos)
+    {
+        // Prevent spawning in certain range around player position
+        int offset = 20;
+        int lowerBound = centrePos - offset;
+        int upperBound = centrePos + offset;
+        var excludeRange = Enumerable.Range(lowerBound, upperBound - lowerBound + 1);
+        return excludeRange;
     }
 }
