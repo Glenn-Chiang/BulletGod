@@ -39,7 +39,7 @@ public class PlayerStats: MonoBehaviour, IDamageable
 
     public float xpPerLevel = 100; // How much xp required to level up
     private int _level = 0;
-    private const int maxLevel = 10;
+    public const int maxLevel = 10;
     public int Level => _level;
 
     public Stat moveSpeed = new(10, 14, maxLevel);

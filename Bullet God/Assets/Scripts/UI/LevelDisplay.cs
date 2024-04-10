@@ -14,5 +14,9 @@ public class LevelDisplay : MonoBehaviour
     private void Update()
     {
         levelNumText.text = playerStats.Level.ToString();
+        if (playerStats.Level == PlayerStats.maxLevel)
+        {
+            levelNumText.text += " (MAX)";
+        }
     }
 }
