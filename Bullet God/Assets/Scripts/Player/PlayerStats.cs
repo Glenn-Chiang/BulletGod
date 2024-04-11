@@ -34,8 +34,9 @@ public class Stat
 
 public class PlayerStats: MonoBehaviour, IDamageable
 {
-    private float _xp = 0;
+    private float _xp = 0; // xp earned at current level
     public float XP => _xp;
+    public float Score { get; private set; } // Score is based on xp received, but player can continue to earn score even if they can no longer earn xp
 
     public float xpPerLevel = 100; // How much xp required to level up
     private int _level = 0;
@@ -90,6 +91,8 @@ public class PlayerStats: MonoBehaviour, IDamageable
 
     public void ReceiveXP(float xp)
     {
+        Score += xp; // Player will continue to be awarded score even if they have reached max level
+
         if (_level == maxLevel) return;
 
         if (_xp + xp < xpPerLevel)

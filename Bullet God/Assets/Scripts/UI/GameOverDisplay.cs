@@ -10,7 +10,6 @@ public class GameOverDisplay : MonoBehaviour
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         gameManager.OnGameOver += ShowGameOver;
-
     }
 
     private void ShowGameOver(object sender, EventArgs e)
