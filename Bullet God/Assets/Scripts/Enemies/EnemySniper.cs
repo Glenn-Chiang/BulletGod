@@ -26,15 +26,5 @@ public class EnemySniper : Enemy
 
     public float moveSpeed = 5;
     public override float MoveSpeed => moveSpeed;
-
-
-
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-
-        
-    }
-
     
 }

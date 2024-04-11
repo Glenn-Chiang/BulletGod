@@ -18,18 +18,18 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     protected PlayerStats playerStats;
     protected PlayerControl playerControl;
 
-    public Rigidbody2D rigidBody;
+    public Rigidbody2D rb;
     public Transform firePoint;
     public EnemyBullet bulletPrefab;
 
-    [SerializeField] ParticleSystem explosionPrefab;
+    [SerializeField] ParticleSystem deathExplosion;
 
     public virtual float AggroDistance => 20; // Enemy will start attacking player when it is within this distance
     public virtual float MinDistance => 10; // Enemy will stop moving toward player when it is less than this distance from the player
     public virtual float AttackInterval => 2;
+    public virtual float BulletDamage => 10;
     public virtual float BulletPower => 10;
     public virtual float MoveSpeed => 10;
-    public virtual float BulletDamage => 10;
 
     [SerializeField]
     protected State state;
@@ -40,9 +40,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         // Start in idle roaming state
         state = State.Idle;
-        startPosition = rigidBody.position;
+        startPosition = rb.position;
         roamDestination = GetRoamDestination();
     }
 
@@ -59,7 +60,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     }
 
-    protected virtual void FixedUpdate()
+    protected void FixedUpdate()
     {
         if (gameManager.GameState == GameManager.State.Active)
         {
@@ -70,16 +71,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         {
             default:
             case State.Idle:
-                // If enemy is shooting, stop shooting
-                if (IsInvoking(nameof(Shoot)))
-                {
-                    CancelInvoke(nameof(Shoot));
-                }
+                StopAttacking();
 
                 // Roam randomly
                 MoveTo(roamDestination);
                 float reachedDestinationDistance = 1; // Minimum distance from destination required to consider the enemy to have reached the destination
-                if (Vector2.Distance(rigidBody.position, roamDestination) < reachedDestinationDistance)
+                if (Vector2.Distance(rb.position, roamDestination) < reachedDestinationDistance)
                 {
                     // Determine the next position to roam towards
                     roamDestination = GetRoamDestination();
@@ -89,9 +86,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
             case State.Aggro:
                 // Rotate towards and aim at player
-                Vector2 aimDirection = playerPosition - rigidBody.position;
+                Vector2 aimDirection = playerPosition - rb.position;
                 float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-                rigidBody.MoveRotation(angle);
+                rb.MoveRotation(angle);
 
                 // Move towards player until it is MinDistance away from player
                 if (distanceFromPlayer > MinDistance)
@@ -100,41 +97,36 @@ public abstract class Enemy : MonoBehaviour, IDamageable
                     MoveTo(playerPosition);
                 }
 
-                // Start shooting if not already shooting
-                if (!IsInvoking(nameof(Shoot)))
-                {
-                    // Shoot at intervals
-                    InvokeRepeating(nameof(Shoot), 0, AttackInterval);
-                }
+                StartAttacking();
                 
                 break;
         }
     }
 
-    private void HandleGameOver(object sender, EventArgs e)
+    protected virtual void StartAttacking()
     {
-        state = State.Idle;
+        // Start shooting if not already shooting
+        if (!IsInvoking(nameof(Shoot)))
+        {
+            // Shoot at intervals
+            InvokeRepeating(nameof(Shoot), 0, AttackInterval);
+        }
     }
 
-    // Randomly decide on a position to move toward while roaming in idle state
-    private Vector2 GetRoamDestination()
+    protected virtual void StopAttacking()
     {
-        var randomDirection = new Vector2(UnityEngine.Random.Range(-1, 1), UnityEngine.Random.Range(-1, 1)).normalized;
-        float minRoamDistance = 5;
-        float maxRoamDistance = 20;
-        var randomDistance = UnityEngine.Random.Range(minRoamDistance, maxRoamDistance);
-        Vector2 destination = startPosition + randomDirection * randomDistance;
-        // Prevent roaming beyond WorldMap boundaries
-        destination.x = Mathf.Clamp(destination.x, WorldMap.minX, WorldMap.maxX);
-        destination.y = Mathf.Clamp(destination.y, WorldMap.minY, WorldMap.maxY);
-        return destination;
+        // If enemy is shooting, stop shooting
+        if (IsInvoking(nameof(Shoot)))
+        {
+            CancelInvoke(nameof(Shoot));
+        }
     }
 
     // Constantly keep track of the player's position to determine whether to be in Idle or Aggro state
     private void TrackPlayer()
     {
         playerPosition = playerControl.rb.position;
-        distanceFromPlayer = Vector2.Distance(rigidBody.position, playerPosition);
+        distanceFromPlayer = Vector2.Distance(rb.position, playerPosition);
 
         if (distanceFromPlayer > AggroDistance)
         {
@@ -158,7 +150,24 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     }
     private void MoveTo(Vector2 destination)
     {
-        rigidBody.MovePosition(Vector2.MoveTowards(rigidBody.position, destination, MoveSpeed * Time.deltaTime));
+        Vector2 moveDir = destination - rb.position;
+        float angle = Mathf.Atan2(moveDir.y, moveDir.x) * Mathf.Rad2Deg;
+        rb.MoveRotation(angle);
+        rb.MovePosition(Vector2.MoveTowards(rb.position, destination, MoveSpeed * Time.deltaTime));
+    }
+
+    // Randomly decide on a position to move toward while roaming in idle state
+    private Vector2 GetRoamDestination()
+    {
+        var randomDirection = new Vector2(UnityEngine.Random.Range(-1, 1), UnityEngine.Random.Range(-1, 1)).normalized;
+        float minRoamDistance = 5;
+        float maxRoamDistance = 20;
+        var randomDistance = UnityEngine.Random.Range(minRoamDistance, maxRoamDistance);
+        Vector2 destination = startPosition + randomDirection * randomDistance;
+        // Prevent roaming beyond WorldMap boundaries
+        destination.x = Mathf.Clamp(destination.x, WorldMap.minX, WorldMap.maxX);
+        destination.y = Mathf.Clamp(destination.y, WorldMap.minY, WorldMap.maxY);
+        return destination;
     }
     public void ReceiveDamage(float damage)
     {
@@ -168,13 +177,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable
             Die();
         }
     }
+    private void HandleGameOver(object sender, EventArgs e)
+    {
+        state = State.Idle;
+    }
 
     protected void Die()
     {
         Destroy(gameObject);
 
         // Spawn explosion
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Instantiate(deathExplosion, transform.position, Quaternion.identity);
 
         // When destroyed, award player with XP
         playerStats.ReceiveXP(XP_reward);

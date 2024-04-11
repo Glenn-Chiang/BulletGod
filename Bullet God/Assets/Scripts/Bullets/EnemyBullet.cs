@@ -8,7 +8,7 @@ public class EnemyBullet : Bullet
 
     private void Start()
     {
-        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+        playerStats = GameObject.Find("Player")?.GetComponent<PlayerStats>();
     }
 
     protected override void OnCollisionEnter2D(Collision2D collision)

@@ -2366,12 +2366,17 @@ MonoBehaviour:
   numberToSpawn: 100
   prefabs:
   - go: {fileID: 8298983342205574474, guid: 7359d8d7875248844bc0427f705c1191, type: 3}
-    weight: 0.5
+    weight: 0.4
   - go: {fileID: 1197344017124599433, guid: bdcd1dcbaaf6f454b9e4e0c22c84b13e, type: 3}
     weight: 0.25
   - go: {fileID: 5088140535084673276, guid: 488ca3d83702d57488d6c53030f27ae5, type: 3}
     weight: 0.25
+  - go: {fileID: 6936673353418939288, guid: cefdbcc721ca490499590025f63f0fc9, type: 3}
+    weight: 0.1
   spawnInterval: 2
+  minSpawnInterval: 0.2
+  incrementInterval: 10
+  factor: 0.9
 --- !u!4 &1668252833
 Transform:
   m_ObjectHideFlags: 0

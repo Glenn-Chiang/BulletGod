@@ -23,7 +23,4 @@ public class EnemyTank : Enemy
     public float minDistance = 0;
     public override float MinDistance => minDistance;
 
-  
-
-
 }

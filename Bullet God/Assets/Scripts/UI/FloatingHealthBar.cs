@@ -17,6 +17,7 @@ public class FloatingHealthBar : MonoBehaviour
 
     private void Update()
     {
+        if (entity == null) return;
         // Update slider to reflect the entity's current HitPoints
         slider.value = entityLogic.HitPoints;
 
