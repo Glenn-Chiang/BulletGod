@@ -22,8 +22,12 @@ public abstract class Spawner : MonoBehaviour
         public float weight;
     }
 
+    protected GameObject player;
+
     protected virtual void Start()
     {
+        player = GameObject.Find("Player");
+
         for (int i = 0; i < NumberToSpawn; i++)
         {
             SpawnRandom();

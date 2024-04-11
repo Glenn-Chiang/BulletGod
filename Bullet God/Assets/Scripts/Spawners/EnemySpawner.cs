@@ -18,7 +18,6 @@ public class EnemySpawner : Spawner
     [SerializeField] private float factor = 0.9f; // Factor by which spawnInterval will be multiplied during each increment
 
     private GameManager gameManager;
-    private GameObject player;
 
     protected override void Start()
     {
@@ -26,8 +25,6 @@ public class EnemySpawner : Spawner
 
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         gameManager.OnGameOver += HandleGameOver;
-
-        player = GameObject.Find("Player");
 
         StartCoroutine(SpawnRoutine());
         InvokeRepeating(nameof(IncrementSpawnRate), 0, incrementInterval);
